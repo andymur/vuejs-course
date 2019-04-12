@@ -4,93 +4,77 @@
     <script src="https://unpkg.com/v-tooltip"></script>
     <script src="https://cdn.jsdelivr.net/npm/v-copy@0.1.0/dist/v-copy.min.js"></script>
     <style type="text/css">
-      div#grid {
-        margin-top: 1vw;
-        width: 60%;
-        display: grid;
-        grid-template-columns: 30px 1fr 1fr 1fr 20px;
-        grid-auto-rows: 50px;
-      }
-      div.gridcell { font-size: 12pt;}
-      div.gridheader {font-weight: bold;}
+      #submit {margin-top: 20px;}
+      #user-form input {margin-bottom: 10px;}
     </style>
   </head>
   <body>
     <div id="app" v-bind:class="title">
       <h1>{{ title }}</h1>
-      <span v-show="showGrid">Number of users: {{ userCount }}</span>
-      <div id="grid" v-show="showGrid">
-        <div class="gridheader">ID</div>
-        <div class="gridheader">NAME</div>
-        <div class="gridheader">SURNAME</div>
-        <div class="gridheader">PATRONYMIC</div>
-        <div class="gridheader">AVATAR</div>
-        <template v-for="(item,index) in gridData">
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_id'">
-            {{item.id}}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + 'firstname'">
-            {{item.firstName}}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_secondname'">
-            {{ item.secondName | capitalize }}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_patronymic'">
-            {{item.patronymic}}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_avatar'">
-            <img source v-bind:src="getAvatarLink(item)" height="30px" type="img"/>
-          </div>
-        </template>
-      </div>
-      <div></div>
-      <button id="toggleGrid" v-on:click="showGrid = !showGrid" v-tooltip="help" v-copy="`some text`" v-copy:callback="handleCopied">
-        Click me
-        {{ showGrid ? ' to hide grid!' : 'to show grid!' }}
-      </button>
+      <user-form v-bind:userdata="userData"></user-form>
     </div>
+
+    <template id="user-form">
+      <form id="user-form">
+        <div>
+          <span>First Name</span>
+          <div>
+              <input type="text" size="50" v-bind:value="userdata.firstName"/>
+          </div>
+        </div>
+        <div>
+          <span>Last Name</span>
+          <div>
+              <input type="text" size="50" v-bind:value="userdata.secondName"/>
+          </div>
+        </div>
+        <div>
+          <span>Patronymic</span>
+          <div>
+              <input type="text" size="50" v-bind:value="userdata.patronymic"/>
+          </div>
+        </div>
+        <button type="button" id="submit">Edit</button>
+      </form>
+    </template>
+
     <script>
+
+      var userForm = {
+        data: function () {
+          return {};
+        },
+        template: '#user-form',
+        props: {
+          userdata: {
+
+          }
+        }
+      };
+
       new Vue({
         el: '#app',
+        components: {
+          'user-form': userForm
+        },
         data: function() {
           return {
-            help: 'Just click me to toggle grid visibility',
             title: 'Hi! Welcome to my simple userlist App!',
-            gridData: [
-              {id: 1, firstName: 'Donald', secondName: 'McDonald', patronymic: 'O\'Hara', avatarLink: null},
-              {id: 2, firstName: 'Matthew', secondName: 'Kinsky', patronymic: 'James', avatarLink: null},
-              {id: 3, firstName: 'Lena', secondName: 'Kovacs', patronymic: 'Maria', avatarLink: null},
-              {id: 4, firstName: 'Roger', secondName: 'Trump', patronymic: 'Edward', avatarLink: null},
-              {id: 5, firstName: 'Andy', secondName: 'Mur', patronymic: 'Alex', avatarLink: 'https://pp.userapi.com/c630324/v630324139/28f44/O2t_HP_TVks.jpg?ava=1'}
-            ],
-            showGrid: true
+            userData: {
+              id: 1,
+              firstName: 'Donald',
+              secondName: 'McDonald',
+              patronymic: 'O\'Hara',
+              avatarLink: null
+            }
           }
         },
-        filters: {
-          capitalize: function (value) {
-            value = value.toString();
-            if (!value) return '';
-            return value.toUpperCase();
-          }
-        },
-        computed: {
-          userCount: function() {
-            return this.gridData.length;
-          }
-        },
+        filters: {},
+        computed: {},
         mounted: function () {
           console.log('App has been mounted!');
         },
         methods: {
-          titleSize: function() {
-            return this.gridData.length;
-          },
-          getAvatarLink: function(item) {
-            return item.avatarLink == null ? 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' : item.avatarLink;
-          },
-          handleCopied: function(text) {
-            console.log(`Copied: ${text}`);
-          }
         }
       });
     </script>
