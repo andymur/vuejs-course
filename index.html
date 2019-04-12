@@ -18,40 +18,88 @@
   <body>
     <div id="app" v-bind:class="title">
       <h1>{{ title }}</h1>
-      <span v-show="showGrid">Number of users: {{ userCount }}</span>
-      <div id="grid" v-show="showGrid">
-        <div class="gridheader">ID</div>
-        <div class="gridheader">NAME</div>
-        <div class="gridheader">SURNAME</div>
-        <div class="gridheader">PATRONYMIC</div>
-        <div class="gridheader">AVATAR</div>
-        <template v-for="(item,index) in gridData">
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_id'">
-            {{item.id}}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + 'firstname'">
-            {{item.firstName}}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_secondname'">
-            {{ item.secondName | capitalize }}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_patronymic'">
-            {{item.patronymic}}
-          </div>
-          <div class="gridcell" v-bind:id="'uid'+item.id + '_avatar'">
-            <img source v-bind:src="getAvatarLink(item)" height="30px" type="img"/>
-          </div>
-        </template>
-      </div>
+      <users-list v-bind:users="gridData" v-bind:show="showGrid">
+      </users-list>
+
       <div></div>
       <button id="toggleGrid" v-on:click="showGrid = !showGrid" v-tooltip="help" v-copy="`some text`" v-copy:callback="handleCopied">
         Click me
         {{ showGrid ? ' to hide grid!' : 'to show grid!' }}
       </button>
     </div>
+
+    <template id="user-list">
+      <div>
+        <span v-show="show">Number of users: {{ userCount }}</span>
+        <div id="grid" v-show="show">
+          <div class="gridheader">ID</div>
+          <div class="gridheader">NAME</div>
+          <div class="gridheader">SURNAME</div>
+          <div class="gridheader">PATRONYMIC</div>
+          <div class="gridheader">AVATAR</div>
+          <template v-for="(item,index) in users">
+            <div class="gridcell" v-bind:id="'uid'+item.id + '_id'">
+              {{item.id}}
+            </div>
+            <div class="gridcell" v-bind:id="'uid'+item.id + 'firstname'">
+              {{item.firstName}}
+            </div>
+            <div class="gridcell" v-bind:id="'uid'+item.id + '_secondname'">
+              {{ item.secondName | capitalize }}
+            </div>
+            <div class="gridcell" v-bind:id="'uid'+item.id + '_patronymic'">
+              {{item.patronymic}}
+            </div>
+            <div class="gridcell" v-bind:id="'uid'+item.id + '_avatar'">
+              <img source v-bind:src="getAvatarLink(item)" height="30px" type="img"/>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+
     <script>
+
+      var usersList = {
+        data: function () {
+          return {}
+        },
+        props: {
+          users: {
+            type: Array,
+            default: []
+          },
+          show: {
+            type: Boolean,
+            default: true
+          }
+        },
+        template: '#user-list',
+        methods: {
+          getAvatarLink: function(item) {
+            return item.avatarLink == null ? 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' : item.avatarLink;
+          }
+        },
+        filters: {
+          capitalize: function (value) {
+            value = value.toString();
+            if (!value) return '';
+            return value.toUpperCase();
+          }
+        },
+        computed: {
+          userCount: function() {
+            return this.users.length;
+          }
+        }
+      };
+
+      // Vue instance
       new Vue({
         el: '#app',
+        components: {
+          'users-list': usersList
+        },
         data: function() {
           return {
             help: 'Just click me to toggle grid visibility',
@@ -66,27 +114,12 @@
             showGrid: true
           }
         },
-        filters: {
-          capitalize: function (value) {
-            value = value.toString();
-            if (!value) return '';
-            return value.toUpperCase();
-          }
-        },
-        computed: {
-          userCount: function() {
-            return this.gridData.length;
-          }
-        },
         mounted: function () {
           console.log('App has been mounted!');
         },
         methods: {
           titleSize: function() {
             return this.gridData.length;
-          },
-          getAvatarLink: function(item) {
-            return item.avatarLink == null ? 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' : item.avatarLink;
           },
           handleCopied: function(text) {
             console.log(`Copied: ${text}`);
