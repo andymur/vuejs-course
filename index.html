@@ -3,6 +3,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/v-tooltip"></script>
     <script src="https://cdn.jsdelivr.net/npm/v-copy@0.1.0/dist/v-copy.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style type="text/css">
       div#grid {
         margin-top: 1vw;
@@ -104,18 +105,20 @@
           return {
             help: 'Just click me to toggle grid visibility',
             title: 'Hi! Welcome to my simple userlist App!',
-            gridData: [
-              {id: 1, firstName: 'Donald', secondName: 'McDonald', patronymic: 'O\'Hara', avatarLink: null},
-              {id: 2, firstName: 'Matthew', secondName: 'Kinsky', patronymic: 'James', avatarLink: null},
-              {id: 3, firstName: 'Lena', secondName: 'Kovacs', patronymic: 'Maria', avatarLink: null},
-              {id: 4, firstName: 'Roger', secondName: 'Trump', patronymic: 'Edward', avatarLink: null},
-              {id: 5, firstName: 'Andy', secondName: 'Mur', patronymic: 'Alex', avatarLink: 'https://pp.userapi.com/c630324/v630324139/28f44/O2t_HP_TVks.jpg?ava=1'}
-            ],
+            gridData: [],
             showGrid: true
           }
         },
         mounted: function () {
           console.log('App has been mounted!');
+          var self = this;
+          axios
+          .get('http://localhost:5000/users/')
+          .then(response => (this.gridData = response.data))
+          .catch(function (error) {
+            self.gridData = [];
+            console.error('cannot read user list from API');
+          });
         },
         methods: {
           titleSize: function() {
