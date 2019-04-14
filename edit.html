@@ -3,6 +3,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/v-tooltip"></script>
     <script src="https://cdn.jsdelivr.net/npm/v-copy@0.1.0/dist/v-copy.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style type="text/css">
       #submit {margin-top: 20px;}
       #user-form input {margin-bottom: 10px;}
@@ -61,18 +62,29 @@
           return {
             title: 'Hi! Welcome to my simple userlist App!',
             userData: {
-              id: 1,
+              /*id: 1,
               firstName: 'Donald',
               secondName: 'McDonald',
               patronymic: 'O\'Hara',
-              avatarLink: null
+              avatarLink: null*/
             }
           }
         },
         filters: {},
         computed: {},
         mounted: function () {
+          const urlParams = new URLSearchParams(window.location.search);
+          const userId = urlParams.get('userId');
+          console.log('userId: ' + userId ? 1 : userId);
           console.log('App has been mounted!');
+          var self = this;
+          axios
+          .get('http://localhost:5000/user/ + userId')
+          .then(response => (this.userData = response.data))
+          .catch(function (error) {
+            self.userData = {};
+            console.error('cannot read user list from API');
+          });
         },
         methods: {
         }
