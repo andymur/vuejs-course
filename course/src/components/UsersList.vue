@@ -22,7 +22,7 @@ div.gridheader {
 <template id="user-list">
   <div>
     <span>Number of users: {{ userCount }}</span>
-    <table id="grid" >
+    <table id="grid">
       <tr>
         <th class="gridheader">ID</th>
         <th class="gridheader">NAME</th>

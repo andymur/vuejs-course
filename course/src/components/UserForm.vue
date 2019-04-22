@@ -3,34 +3,50 @@
     <div>
       <span>First Name</span>
       <div>
-        <input type="text" size="50" v-bind:value="userdata.firstName" />
+        <input type="text" size="50" v-model="user.firstName" />
       </div>
     </div>
     <div>
       <span>Last Name</span>
       <div>
-        <input type="text" size="50" v-bind:value="userdata.secondName" />
+        <input type="text" size="50" v-model="user.secondName" />
       </div>
     </div>
     <div>
       <span>Patronymic</span>
       <div>
-        <input type="text" size="50" v-bind:value="userdata.patronymic" />
+        <input type="text" size="50" v-model="user.patronymic" />
       </div>
+    </div>
+    <div>
+      local user:
+      <pre>{{ user }}</pre>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  data: function() {
-    return {};
-  },
+  name: "userform",
   props: {
     userdata: {
-      type: Object,
-      default: function() {
-        return {};
+      type: Object
+    }
+  },
+  data: function() {
+    return {
+      user: {}
+    };
+  },
+  mounted() {
+    console.log(this.userdata);
+    this.user = Object.assign({}, this.userdata);
+  },
+  watch: {
+    user: {
+      deep: true,
+      handler: function() {
+        this.$emit("userChanged", this.user);
       }
     }
   }
