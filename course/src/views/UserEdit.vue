@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <!-- HelloWorld msg="Welcome to Your Vue.js App" / -->
-    <user-form :userdata="userData" :editForm="true"></user-form>
+    <user-form :userdata="userData"></user-form>
+    <button type="button" id="submit">Edit</button>
   </div>
 </template>
 

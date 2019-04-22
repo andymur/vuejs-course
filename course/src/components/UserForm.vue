@@ -18,8 +18,6 @@
         <input type="text" size="50" v-bind:value="userdata.patronymic" />
       </div>
     </div>
-    <button type="button" id="submit" v-if="editForm">Edit</button>
-    <button type="button" id="submit" v-else>Add</button>
   </form>
 </template>
 
@@ -34,8 +32,7 @@ export default {
       default: function() {
         return {};
       }
-    },
-    editForm: Boolean
+    }
   }
 };
 </script>

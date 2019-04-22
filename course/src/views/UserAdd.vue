@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <!-- HelloWorld msg="Welcome to Your Vue.js App" / -->
-    <user-form :userdata="userData" :editForm="false"></user-form>
+    <user-form :userdata="userData"></user-form>
+    <button type="button" id="submit">Add</button>
   </div>
 </template>
 
@@ -18,14 +18,6 @@ export default {
   },
   mounted: function() {
     console.log("App has been mounted!");
-    /*var self = this;
-    axios
-      .get("http://localhost:5000/users/")
-      .then(response => (this.gridData = response.data))
-      .catch(function(error) {
-        self.gridData = [];
-        console.error("cannot read user list from API " + error);
-      });*/
   },
   data: function() {
     return {
