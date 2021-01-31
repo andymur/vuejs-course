@@ -1,11 +1,11 @@
 <template>
     <div>
         <div>
-            Here we have a Link: {{ link.url }}
+            Here we have a Link: {{ url }}
         </div>
-        <div>Category: {{ link.category }}</div>
+        <div>Category: {{ category }}</div>
         <div> Tags:
-            <div v-for="tag in link.tags" v-bind:key="tag">
+            <div v-for="tag in tags" v-bind:key="tag">
                 #{{ tag }}
             </div>
         </div>
@@ -15,20 +15,23 @@
 <script>
 export default {
   props: {
-      linkdata: {
-          type: Object,
-          default: function() {
-              return {"id": 2, "url": "http://javascript.ru", "category": "Applied", "tags": ["js"]}
-          }
+      url: {
+          type: String
+      },
+      category: {
+        type: String
+      },
+      tags: {
+        type: Array,
+        default: function() {
+          return []
+        }
       }
   },
   data: function() {
-    return {
-      link: {}
-    };
+    return {}
   },
   mounted() {
-    this.link = Object.assign({}, this.linkdata);
   }
 };
 </script>
