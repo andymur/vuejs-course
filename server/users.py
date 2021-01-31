@@ -19,9 +19,29 @@ users = [donald, matt, lena, roger, andy]
 
 users_hash = {1: donald, 2: matt, 3: lena, 4: roger, 5: andy}
 
+google = {'id': 1, 'url': 'http://google.com', 'tags': ['search']}
+jsru = {'id': 2, 'url': 'http://javascript.ru', 'category': 'Applied', 'tags': ['js']}
+
+links = [google, jsru]
+links_hash = {1: google, 2: jsru}
+
+@app.route('/link/<int:linkId>')
+def link_data(linkId):
+    link = links_hash.get(linkId)
+    if link is None:
+        raise Exception('Link not found!')
+    response = Response(response=json.dumps(link), status=200, mimetype='application/json')
+    return response
+ 
+@app.route('/links/')
+def links_list():
+    content = links  
+    response = Response(response=json.dumps(content), status=200, mimetype='application/json')
+    return response
+
 @app.route('/users/')
 def users_list():
-    content = list(users_hash.itervalues()) 
+    content =  users  
     response = Response(response=json.dumps(content), status=200, mimetype='application/json')
     return response
 
