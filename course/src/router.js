@@ -27,6 +27,11 @@ export default new Router({
       path: "/add",
       name: "add",
       component: () => import("@/views/UserAdd.vue")
+    },
+    {
+      path: "/links",
+      name: "links",
+      component: () => import("@/views/Links.vue")
     }
   ]
 });
